@@ -34,9 +34,9 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-        String[] fakeArgs = {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\Split\\Images1903.xml",
-                                "-s","0.1"};
-        CommandLine cli = PARSER.parse(options, fakeArgs);
+//        String[] fakeArgs = {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\Split\\Images1903.xml",
+//                                "-s","0.1"};
+        CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();
         Splitter splitter = (Splitter) null;
