@@ -5,6 +5,7 @@
  */
 package com.smartupds.split;
 
+import com.smartupds.split.impl.XMLSplitter;
 import com.smartupds.split.impl.TRIGSplitter;
 import com.smartupds.split.api.Splitter;
 import com.smartupds.split.common.Resources;
@@ -33,14 +34,15 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        String[] fakeArgs = {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\SparqlQueryGenerator\\src\\main\\resources\\2020-10-05T15-46-27.226.trig",
-//                                "-s","0.1"};
-        CommandLine cli = PARSER.parse(options, args);
+        String[] fakeArgs = {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\Split\\Images1903.xml",
+                                "-s","0.1"};
+        CommandLine cli = PARSER.parse(options, fakeArgs);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();
         Splitter splitter = (Splitter) null;
         if (isFolder){
             for ( String path :listFilesForFolder(new File (file.getAbsolutePath()))){
+                path = path.trim();
                 try {
                     String type = path.substring(path.lastIndexOf(".")+1);
                     if (type.equalsIgnoreCase(Resources.RDF))
@@ -51,6 +53,8 @@ public class Main {
                         splitter = new TTLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
                     else if (type.equalsIgnoreCase(Resources.TRIG))
                         splitter = new TRIGSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+                    else if (type.equalsIgnoreCase(Resources.XML))
+                        splitter = new XMLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
                     else
                         throw new UnsupportedOperationException("File type not supported yet.");
                     splitter.split();
@@ -68,6 +72,8 @@ public class Main {
                 splitter = new TTLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.TRIG))
                 splitter = new TRIGSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.XML))
+                splitter = new XMLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else
                 throw new UnsupportedOperationException("File type not supported yet.");
             splitter.split();

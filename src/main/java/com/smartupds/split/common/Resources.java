@@ -16,5 +16,6 @@ public class Resources {
     public static final String TSV = "tsv";
     public static final String TRIG = "trig";
     public static final String TTL = "ttl";
+    public static final String XML = "xml";
     
 }
