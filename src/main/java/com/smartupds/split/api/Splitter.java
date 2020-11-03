@@ -11,6 +11,9 @@ package com.smartupds.split.api;
  */
 public interface Splitter {
     
+    /**
+     *
+     */
     public void split();
     
 }
