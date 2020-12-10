@@ -54,7 +54,7 @@ public class CSVSplitter implements Splitter {
                     if (j==0)
                         firstLine = row;
                     if (j%linesPerFile==0 && j>0){
-                        System.out.println("Exported file "+path+"_part_"+i+type);
+                        Logger.getLogger(RDFSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}{2}", new Object[]{path, i, type});                      
                         writer.close();
                         i++;
                         writer = new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+type), "UTF-8");

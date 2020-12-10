@@ -5,6 +5,7 @@
  */
 package com.smartupds.split.impl;
 
+import com.smartupds.split.Main;
 import com.smartupds.split.api.Splitter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,7 +67,7 @@ public class XMLSplitter implements Splitter {
                             xmlwriter.close();
                             if (i==numberOfFiles)
                                 break;
-                            System.out.println("Exported file "+path+"_part_"+i+".xml");
+                            Logger.getLogger(XMLSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}.xml", new Object[]{path, i});
                             xmlwriter = new XMLWriter( new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".xml"), "UTF-8"), format );
                             newRootElement = rootBaseElement.createCopy();
                             i++;

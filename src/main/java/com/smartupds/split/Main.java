@@ -34,14 +34,18 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        String[] fakeArgs = {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\Split\\Images1903.xml",
-//                                "-s","0.1"};
+//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\Data_For_Instance_Matching\\Matched\\Institutions",
+//                                "-s","0.5"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();
         Splitter splitter = (Splitter) null;
         if (isFolder){
-            for ( String path :listFilesForFolder(new File (file.getAbsolutePath()))){
+            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting Multiple Files Started.");
+            ArrayList<String> paths = listFilesForFolder(new File (file.getAbsolutePath()));
+            int counter = 1 ;
+            for ( String path : paths){
+                double percent = (double) counter*100/paths.size();
                 path = path.trim();
                 try {
                     String type = path.substring(path.lastIndexOf(".")+1);
@@ -58,11 +62,15 @@ public class Main {
                     else
                         throw new UnsupportedOperationException("File type not supported yet.");
                     splitter.split();
+                    Logger.getLogger(Main.class.getName()).log(Level.INFO, "Process at {0} %", percent);
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                counter ++;
             }
+            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting Multiple Files Completed.");
         } else {
+            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting File Started.");
             String type = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".")+1);
             if (type.equalsIgnoreCase(Resources.RDF))
                 splitter = new RDFSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
@@ -77,6 +85,7 @@ public class Main {
             else
                 throw new UnsupportedOperationException("File type not supported yet.");
             splitter.split();
+            Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting File Completed.");
         }
         
     }

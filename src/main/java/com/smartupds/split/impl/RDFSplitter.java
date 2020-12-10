@@ -65,7 +65,7 @@ public class RDFSplitter implements Splitter {
                             xmlwriter.close();
                             if (i==numberOfFiles)
                                 break;
-                            System.out.println("Exported file "+path+"_part_"+i+".rdf");
+                            Logger.getLogger(RDFSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}.rdf", new Object[]{path, i});                           
                             xmlwriter = new XMLWriter( new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".rdf"), "UTF-8"), format );
                             newRootElement = rootBaseElement.createCopy();
                             i++;

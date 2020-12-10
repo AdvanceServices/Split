@@ -1,29 +1,13 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Split Applet that supports xml, rdf, tsv, csv, trig or ttl files.
 
-### What is this repository for? ###
+### Run ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+```bash
+$ java -jar Split-0.1-assembly.jar -f [file] -s [size_in_MB]
+```
+or 
+```bash
+$ java -jar Split-0.1-assembly.jar -f [directory] -s [size_in_MB]
+```

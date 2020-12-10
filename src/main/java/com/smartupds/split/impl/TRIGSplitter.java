@@ -60,7 +60,7 @@ public class TRIGSplitter implements Splitter {
                             writer.append(row + "\n");
                             j++;
                         }
-                        System.out.println("Exported file "+path+"_part_"+i+".trig");
+                        Logger.getLogger(TRIGSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}.trig", new Object[]{path, i});
                         writer.close();
                         i++;
                         writer = new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".trig"), "UTF-8");
