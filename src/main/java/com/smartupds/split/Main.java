@@ -34,7 +34,7 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\Data_For_Instance_Matching\\Matched\\Institutions",
+//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\NetBeansProjects\\PostProcessing\\to_upload",
 //                                "-s","0.5"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
@@ -104,7 +104,9 @@ public class Main {
     private static ArrayList<String> listFilesForFolder(final File folder) {
         ArrayList<String> filePaths = new ArrayList<>(); 
         for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
+            if (fileEntry.getName().contains("desktop.ini")){
+                //ignore
+            } else if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
             } else {
                 filePaths.add(folder.getAbsoluteFile() + "\\" + fileEntry.getName());
