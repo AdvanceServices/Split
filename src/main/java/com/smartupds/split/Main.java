@@ -25,7 +25,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 /**
- *
+ * A Splitter that supports RDF, TSV, CSV, TTL, N3, TRIG, XML 
  * @author mafragias
  */
 public class Main {
@@ -34,7 +34,7 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\NetBeansProjects\\PostProcessing\\to_upload",
+//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\PHAROS\\Enrichment\\enrichment_ulan_fcfr\\fcfr_getty_related_persons_or_corporate_bodies_to_upload.ttl",
 //                                "-s","0.5"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
@@ -53,7 +53,7 @@ public class Main {
                         splitter = new RDFSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
                     else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV))
                         splitter = new CSVSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.TTL))
+                    else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3))
                         splitter = new TTLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
                     else if (type.equalsIgnoreCase(Resources.TRIG))
                         splitter = new TRIGSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
@@ -76,7 +76,7 @@ public class Main {
                 splitter = new RDFSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV) )
                 splitter = new CSVSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.TTL))
+            else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3))
                 splitter = new TTLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.TRIG))
                 splitter = new TRIGSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));

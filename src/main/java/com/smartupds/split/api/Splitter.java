@@ -12,7 +12,7 @@ package com.smartupds.split.api;
 public interface Splitter {
     
     /**
-     *
+     * Method to override for splitting a file.
      */
     public void split();
     
