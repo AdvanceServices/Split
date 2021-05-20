@@ -6,6 +6,7 @@
 package com.smartupds.split.impl;
 
 import com.smartupds.split.api.Splitter;
+import com.smartupds.split.common.Resources;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,8 +18,13 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 
 /**
  *
@@ -33,7 +39,10 @@ public class TRIGSplitter implements Splitter {
 
 
     public TRIGSplitter(String originalFile, double size) throws FileNotFoundException {
-        this.path = originalFile.substring(0,originalFile.lastIndexOf("."));
+        File file = new File(originalFile);
+        String split = (file.getParent()).concat("/"+Resources.SPLIT+"/");
+        new File(split).mkdir();
+        this.path = (file.getParent()).concat("/"+Resources.SPLIT+"/").concat(file.getName().substring(0,file.getName().lastIndexOf(".")));
         this.numberOfFiles = (int)Math.round((new File(originalFile).length()) / (size*1024*1024)) ;
         this.originalFile = new FileInputStream(originalFile);
         this.originalPath = Paths.get(originalFile);
@@ -43,32 +52,27 @@ public class TRIGSplitter implements Splitter {
     public void split() {
         try {
             if (numberOfFiles>0){
-                BufferedReader reader = new BufferedReader(new InputStreamReader(originalFile,"UTF-8"));
                 long linesPerFile = Files.lines(originalPath).count()/numberOfFiles;
-                String row = null;
+                Dataset dataset = RDFDataMgr.loadDataset(originalPath.toString()) ;
+//                dataset.addNamedModel(dataset.getDefaultModel().getGraph().toString(),dataset.getDefaultModel());
+//                dataset.addNamedModel(dataset.getUnionModel().getGraph().toString(),dataset.getUnionModel());
+                Iterator<String> list = dataset.listNames();
                 int i=0;
                 int j=0;
-                String firstLine = "";
                 OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".trig"), "UTF-8");
-                while((row = reader.readLine())!=null){
-                    if (j%linesPerFile==0 && j>0){    
-                        while((row = reader.readLine())!=null && row.startsWith("@")){
-                            writer.append(row + "\n");
-                            j++;
-                        }
-                        while((row = reader.readLine())!=null && !row.startsWith("@")){
-                            writer.append(row + "\n");
-                            j++;
-                        }
-                        Logger.getLogger(TRIGSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}.trig", new Object[]{path, i});
+                while(list.hasNext()){
+                    long lines = Files.lines(Paths.get(path+"_part_"+i+".trig")).count();
+                    if(lines>linesPerFile){
                         writer.close();
                         i++;
                         writer = new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".trig"), "UTF-8");
                     }
-                    writer.append(row+"\n");
-                    j++;
+                    String graph = list.next();
+                    Model model = dataset.getNamedModel(graph);
+                    writer.append("<"+graph+"> {\n");
+                    model.write(writer, "TRIG");
+                    writer.append("}\n");
                 }
-                System.out.println("Exported file "+path+"_part_"+i+".trig");
                 writer.close();
             }
         } catch (IOException ex) {

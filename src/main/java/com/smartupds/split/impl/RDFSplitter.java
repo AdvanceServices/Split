@@ -6,6 +6,7 @@
 package com.smartupds.split.impl;
 
 import com.smartupds.split.api.Splitter;
+import com.smartupds.split.common.Resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,7 +36,10 @@ public class RDFSplitter implements Splitter {
     private Document doc;
     
     public RDFSplitter (String originalFile, double size) throws FileNotFoundException{
-        this.path = originalFile.substring(0,originalFile.lastIndexOf("."));
+        File file = new File(originalFile);
+        String split = (file.getParent()).concat("/"+Resources.SPLIT+"/");
+        new File(split).mkdir();
+        this.path = (file.getParent()).concat("/"+Resources.SPLIT+"/").concat(file.getName().substring(0,file.getName().lastIndexOf(".")));
         this.numberOfFiles = (int)Math.round((new File(originalFile).length()) / (size*1024*1024)) ;
         this.originalFile = new FileInputStream(originalFile);
     }

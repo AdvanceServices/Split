@@ -18,5 +18,8 @@ public class Resources {
     public static final String TTL = "ttl";
     public static final String N3 = "n3";
     public static final String XML = "xml";
+    public static final String NT = "nt";
+    public static final String JSON = "json";
+    public static final String SPLIT = "split";
     
 }

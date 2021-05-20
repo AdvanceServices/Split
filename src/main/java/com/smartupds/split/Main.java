@@ -10,6 +10,7 @@ import com.smartupds.split.impl.TRIGSplitter;
 import com.smartupds.split.api.Splitter;
 import com.smartupds.split.common.Resources;
 import com.smartupds.split.impl.CSVSplitter;
+import com.smartupds.split.impl.JSONSplitter;
 import com.smartupds.split.impl.TTLSplitter;
 import com.smartupds.split.impl.RDFSplitter;
 import java.io.File;
@@ -34,8 +35,8 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\PHAROS\\Enrichment\\enrichment_ulan_fcfr\\fcfr_getty_related_persons_or_corporate_bodies_to_upload.ttl",
-//                                "-s","0.5"};
+        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\UploaderDownloader\\workspace\\output\\places.n3",
+                                "-s","0.5"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();
@@ -53,7 +54,9 @@ public class Main {
                         splitter = new RDFSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
                     else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV))
                         splitter = new CSVSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3))
+                    else if (type.equalsIgnoreCase(Resources.JSON))
+                        splitter = new JSONSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+                    else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3) || type.equalsIgnoreCase(Resources.NT))
                         splitter = new TTLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
                     else if (type.equalsIgnoreCase(Resources.TRIG))
                         splitter = new TRIGSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
@@ -76,6 +79,8 @@ public class Main {
                 splitter = new RDFSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV) )
                 splitter = new CSVSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.JSON))
+                splitter = new JSONSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3))
                 splitter = new TTLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.TRIG))
@@ -94,11 +99,14 @@ public class Main {
         Option fileOption = new Option("f", "file", true,"Input file");
         fileOption.setRequired(true);
         
+//        Option outputOption = new Option("o", "output", true,"Output Folder");
+
         Option sizeOption = new Option("s", "size", true,"The file size in MB");
         sizeOption.setRequired(true);
         
         options.addOption(fileOption)
-               .addOption(sizeOption);
+//                .addOption(outputOption)
+                .addOption(sizeOption);
     }
     
     private static ArrayList<String> listFilesForFolder(final File folder) {
