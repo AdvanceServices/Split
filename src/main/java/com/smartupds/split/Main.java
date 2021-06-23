@@ -117,8 +117,8 @@ public class Main {
             } else if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
             } else {
-                filePaths.add(folder.getAbsoluteFile() + "\\" + fileEntry.getName());
-                System.out.println(folder.getAbsoluteFile() + "\\" + fileEntry.getName());
+                filePaths.add(folder.getAbsoluteFile() + "/" + fileEntry.getName());
+                System.out.println(folder.getAbsoluteFile() + "/" + fileEntry.getName());
             }
         }
         return filePaths;
