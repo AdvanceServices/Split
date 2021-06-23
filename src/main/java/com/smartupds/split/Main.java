@@ -35,8 +35,8 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\PHAROS\\data\\KHI-20Records\\formated.xml",
-//                                "-s","0.5"};
+//        args = new String[] {   "-f","C:\\Users\\mafragias\\Downloads\\aat_terms.n3",
+//                                "-s","0.1"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();

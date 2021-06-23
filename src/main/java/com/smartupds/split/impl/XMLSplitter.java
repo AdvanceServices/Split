@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -53,10 +54,11 @@ public class XMLSplitter implements Splitter {
                 SAXReader reader = new SAXReader();
                 reader.setEncoding(new InputStreamReader(originalFile).getEncoding());
                 doc = reader.read(originalFile);
-                Element rootElement = doc.getRootElement();
-                Element rootBaseElement = rootElement.createCopy();
-                rootBaseElement.elements().clear();
-                List<Element> elementsList = rootElement.elements();
+//                Element rootBaseElement = DocumentHelper.createElement("root"); // for big files
+                Element rootBaseElement = DocumentHelper.createElement(doc.getRootElement().getName());
+                List<Element> elementsList = doc.getRootElement().elements();
+//                rootBaseElement.elements().clear();
+                
                 int elementsPerFile = elementsList.size() / numberOfFiles;
 
                 int i=0;

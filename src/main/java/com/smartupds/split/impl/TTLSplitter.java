@@ -53,12 +53,17 @@ public class TTLSplitter implements Splitter {
                 int i=0;
                 int j=0;
                 OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+type), "UTF-8");
+                String prefixes = "";
                 while((row = reader.readLine())!=null){
                     if (j%linesPerFile==0 && j>0){
                         Logger.getLogger(TTLSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}{2}", new Object[]{path, i, type});
                         writer.close();
                         i++;
                         writer = new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+type), "UTF-8");
+                        writer.append(prefixes +"\n\n");
+                    }
+                    if(row.startsWith("@prefix")){
+                        prefixes = prefixes + "\n" + row ;
                     }
                     writer.append(row+"\n");
                     j++;
