@@ -81,7 +81,7 @@ public class Main {
                 splitter = new CSVSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.JSON))
                 splitter = new JSONSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3))
+            else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3) || type.equalsIgnoreCase(Resources.NT) )
                 splitter = new TTLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
             else if (type.equalsIgnoreCase(Resources.TRIG))
                 splitter = new TRIGSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
