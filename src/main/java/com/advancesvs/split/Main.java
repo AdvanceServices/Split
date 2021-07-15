@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.smartupds.split;
+package com.advancesvs.split;
 
-import com.smartupds.split.impl.XMLSplitter;
-import com.smartupds.split.impl.TRIGSplitter;
-import com.smartupds.split.api.Splitter;
-import com.smartupds.split.common.Resources;
-import com.smartupds.split.impl.CSVSplitter;
-import com.smartupds.split.impl.JSONSplitter;
-import com.smartupds.split.impl.TTLSplitter;
-import com.smartupds.split.impl.RDFSplitter;
+import com.advancesvs.split.impl.XMLSplitter;
+import com.advancesvs.split.impl.TRIGSplitter;
+import com.advancesvs.split.api.Splitter;
+import com.advancesvs.split.common.Resources;
+import com.advancesvs.split.impl.CSVSplitter;
+import com.advancesvs.split.impl.JSONSplitter;
+import com.advancesvs.split.impl.TTLSplitter;
+import com.advancesvs.split.impl.RDFSplitter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        args = new String[] {   "-f","C:\\Users\\mafragias\\Downloads\\aat_terms.n3",
-//                                "-s","0.1"};
+        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\DataPreprocessing\\fixed2.trig",
+                                "-s","0.5"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();

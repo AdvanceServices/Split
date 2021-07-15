@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.smartupds.split.impl;
+package com.advancesvs.split.impl;
 
-import com.smartupds.split.api.Splitter;
-import com.smartupds.split.common.Resources;
+import com.advancesvs.split.api.Splitter;
+import com.advancesvs.split.common.Resources;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.smartupds.split.common;
+package com.advancesvs.split.common;
 
 /**
  * Constant Variables initialization.

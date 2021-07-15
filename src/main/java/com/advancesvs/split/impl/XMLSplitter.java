@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.smartupds.split.impl;
+package com.advancesvs.split.impl;
 
-import com.smartupds.split.api.Splitter;
-import com.smartupds.split.common.Resources;
+import com.advancesvs.split.Main;
+import com.advancesvs.split.api.Splitter;
+import com.advancesvs.split.common.Resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -29,13 +31,14 @@ import org.dom4j.io.XMLWriter;
  *
  * @author mafragias
  */
-public class RDFSplitter implements Splitter {
+public class XMLSplitter implements Splitter {
+
     private final int numberOfFiles;
     private final InputStream originalFile;
     private final String path;
     private Document doc;
     
-    public RDFSplitter (String originalFile, double size) throws FileNotFoundException{
+    public XMLSplitter (String originalFile, double size) throws FileNotFoundException{
         File file = new File(originalFile);
         String split = (file.getParent()).concat("/"+Resources.SPLIT+"/");
         new File(split).mkdir();
@@ -51,16 +54,17 @@ public class RDFSplitter implements Splitter {
                 SAXReader reader = new SAXReader();
                 reader.setEncoding(new InputStreamReader(originalFile).getEncoding());
                 doc = reader.read(originalFile);
-                Element rootElement = doc.getRootElement();
-                Element rootBaseElement = rootElement.createCopy();
-                rootBaseElement.elements().clear();
-                List<Element> elementsList = rootElement.elements();
+//                Element rootBaseElement = DocumentHelper.createElement("root"); // for big files
+                Element rootBaseElement = DocumentHelper.createElement(doc.getRootElement().getName());
+                List<Element> elementsList = doc.getRootElement().elements();
+//                rootBaseElement.elements().clear();
+                
                 int elementsPerFile = elementsList.size() / numberOfFiles;
 
                 int i=0;
                 int j=0;
                 OutputFormat format = OutputFormat.createPrettyPrint();
-                XMLWriter xmlwriter = new XMLWriter(new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".rdf"), "UTF-8"), format);
+                XMLWriter xmlwriter = new XMLWriter(new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".xml"), "UTF-8"), format);
                 Element newRootElement = rootBaseElement.createCopy();
                 while(i<numberOfFiles){
                     while (j<elementsList.size()){
@@ -69,8 +73,8 @@ public class RDFSplitter implements Splitter {
                             xmlwriter.close();
                             if (i==numberOfFiles)
                                 break;
-                            Logger.getLogger(RDFSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}.rdf", new Object[]{path, i});                           
-                            xmlwriter = new XMLWriter( new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".rdf"), "UTF-8"), format );
+                            Logger.getLogger(XMLSplitter.class.getName()).log(Level.INFO, "Exported file {0}_part_{1}.xml", new Object[]{path, i});
+                            xmlwriter = new XMLWriter( new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".xml"), "UTF-8"), format );
                             newRootElement = rootBaseElement.createCopy();
                             i++;
                         }
