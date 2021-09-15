@@ -8,6 +8,7 @@ package com.advancesvs.split.impl;
 import com.advancesvs.split.Main;
 import com.advancesvs.split.api.Splitter;
 import com.advancesvs.split.common.Resources;
+import com.sun.org.apache.xml.internal.utils.NameSpace;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,6 +24,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Namespace;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -52,9 +54,10 @@ public class XMLSplitter implements Splitter {
         try {
             if(numberOfFiles>0){
                 SAXReader reader = new SAXReader();
-                reader.setEncoding(new InputStreamReader(originalFile).getEncoding());
+//                reader.setEncoding(new InputStreamReader(originalFile).getEncoding());
+//                reader.setEncoding("UTF-8");
                 doc = reader.read(originalFile);
-//                Element rootBaseElement = DocumentHelper.createElement("root"); // for big files
+//                Element rootBaseElement = DocumentHelper.createElement("marc:collection"); // for big files
                 Element rootBaseElement = DocumentHelper.createElement(doc.getRootElement().getName());
                 List<Element> elementsList = doc.getRootElement().elements();
 //                rootBaseElement.elements().clear();

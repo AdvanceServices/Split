@@ -35,8 +35,8 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\NetBeansProjects\\DataPreprocessing\\fixed2.trig",
-                                "-s","0.5"};
+//        args = new String[] {   "-f","C:\\Users\\mafragias\\Downloads\\iconclass_20200710_skos_jsonld.ndjson",
+//                                "-s","4"};
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();

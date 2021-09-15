@@ -20,6 +20,7 @@ public class Resources {
     public static final String XML = "xml";
     public static final String NT = "nt";
     public static final String JSON = "json";
+    public static final String NDJSON = "ndjson";
     public static final String SPLIT = "split";
     
 }
