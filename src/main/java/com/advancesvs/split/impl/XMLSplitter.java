@@ -85,7 +85,6 @@ public class XMLSplitter implements Splitter {
                 OutputFormat format = OutputFormat.createPrettyPrint();
                 XMLWriter xmlwriter = new XMLWriter(new OutputStreamWriter(new FileOutputStream(path+"_part_"+i+".xml"), "UTF-8"), format);
                 Element newRootElement = rootBaseElement.createCopy();
-                System.out.println(newRootElement.asXML());
                 while(i<numOfFiles){
                     while (j<elementsList.size()){
                         if (j%elementsPerFile==0){
