@@ -62,8 +62,8 @@ public class XMLSplitter implements Splitter {
         if (numOfFiles > 0) {
             try {
                 SAXReader reader = new SAXReader();
-                reader.setEncoding(new InputStreamReader(originalFile).getEncoding());
-////                reader.setEncoding("UTF-8");
+//                reader.setEncoding(new InputStreamReader(originalFile).getEncoding());
+                reader.setEncoding("UTF-8");
                 doc = reader.read(originalFile);
 ////                Element rootBaseElement = DocumentHelper.createElement("marc:collection"); // for big files
                 Element rootBaseElement = DocumentHelper.createElement(doc.getRootElement().getName());
