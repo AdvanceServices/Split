@@ -35,12 +35,17 @@ public class Main {
     
     public static void main(String []args) throws Exception{
         createOptionsList();
-//        args = new String[] {   "-f","C:\\Users\\mafragias\\Downloads\\iconclass_20200710_skos_jsonld.ndjson",
-//                                "-s","4"};
+//        args = new String[] {   "-f","C:\\Users\\mafragias\\Documents\\WORKSPACE\\GitHub\\ETL-Controller\\delete_logs\\response_log.xml",
+//                                "-s","6"
+//                                ,"-e","results"
+//        };
         CommandLine cli = PARSER.parse(options, args);
         File file = new File(cli.getOptionValue("file"));
         boolean isFolder = file.isDirectory();
         Splitter splitter = (Splitter) null;
+        String element = null;
+        if (cli.hasOption(Resources.ELEMENT))
+            element = cli.getOptionValue(Resources.ELEMENT);
         if (isFolder){
             Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting Multiple Files Started.");
             ArrayList<String> paths = listFilesForFolder(new File (file.getAbsolutePath()));
@@ -50,21 +55,7 @@ public class Main {
                 path = path.trim();
                 try {
                     String type = path.substring(path.lastIndexOf(".")+1);
-                    if (type.equalsIgnoreCase(Resources.RDF))
-                        splitter = new RDFSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV))
-                        splitter = new CSVSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.JSON))
-                        splitter = new JSONSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3) || type.equalsIgnoreCase(Resources.NT))
-                        splitter = new TTLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.TRIG))
-                        splitter = new TRIGSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else if (type.equalsIgnoreCase(Resources.XML))
-                        splitter = new XMLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
-                    else
-                        throw new UnsupportedOperationException("File type not supported yet.");
-                    splitter.split();
+                    selectSplitter(splitter, type, path, cli , element).split();
                     Logger.getLogger(Main.class.getName()).log(Level.INFO, "Process at {0} %", percent);
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,21 +66,7 @@ public class Main {
         } else {
             Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting File Started.");
             String type = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".")+1);
-            if (type.equalsIgnoreCase(Resources.RDF))
-                splitter = new RDFSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV) )
-                splitter = new CSVSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.JSON))
-                splitter = new JSONSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3) || type.equalsIgnoreCase(Resources.NT) )
-                splitter = new TTLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.TRIG))
-                splitter = new TRIGSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else if (type.equalsIgnoreCase(Resources.XML))
-                splitter = new XMLSplitter(file.getAbsolutePath(), Double.parseDouble(cli.getOptionValue("size")));
-            else
-                throw new UnsupportedOperationException("File type not supported yet.");
-            splitter.split();
+            selectSplitter(splitter, type, file.getAbsolutePath(), cli , element).split();
             Logger.getLogger(Main.class.getName()).log(Level.INFO, "Splitting File Completed.");
         }
         
@@ -98,15 +75,13 @@ public class Main {
     private static void createOptionsList(){
         Option fileOption = new Option("f", "file", true,"Input file");
         fileOption.setRequired(true);
-        
-//        Option outputOption = new Option("o", "output", true,"Output Folder");
-
         Option sizeOption = new Option("s", "size", true,"The file size in MB");
         sizeOption.setRequired(true);
+        Option element = new Option("e", "element", true,"Element to split");
         
         options.addOption(fileOption)
-//                .addOption(outputOption)
-                .addOption(sizeOption);
+                .addOption(sizeOption)
+                .addOption(element);
     }
     
     private static ArrayList<String> listFilesForFolder(final File folder) {
@@ -122,5 +97,26 @@ public class Main {
             }
         }
         return filePaths;
+    }
+    
+    
+    private static Splitter selectSplitter(Splitter splitter, String type, String path, CommandLine cli ,String element) throws FileNotFoundException{
+            if (type.equalsIgnoreCase(Resources.RDF))
+                splitter = new RDFSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.CSV) || type.equalsIgnoreCase(Resources.TSV))
+                splitter = new CSVSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.JSON))
+                splitter = new JSONSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.TTL) || type.equalsIgnoreCase(Resources.N3) || type.equalsIgnoreCase(Resources.NT))
+                splitter = new TTLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.TRIG))
+                splitter = new TRIGSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.XML) && !cli.hasOption(Resources.ELEMENT))
+                splitter = new XMLSplitter(path, Double.parseDouble(cli.getOptionValue("size")));
+            else if (type.equalsIgnoreCase(Resources.XML) && cli.hasOption(Resources.ELEMENT))
+                splitter = new XMLSplitter(path, Double.parseDouble(cli.getOptionValue("size")),element);
+            else
+                throw new UnsupportedOperationException("File type not supported yet.");
+        return splitter;
     }
 }
